@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ======================
+// BẢNG USER (NGƯỜI THUÊ)
+// ======================
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password      String
+  name          String?
+  phone         String?
+  signaturePath String?  // 🔹 thêm trường chữ ký
+  createdAt     DateTime @default(now())
+}
+
+// ======================
+// BẢNG LANDLORD (CHỦ TRỌ)
+// ======================
+model Landlord {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password      String
+  name          String?
+  phone         String?
+  address       String?
+  signaturePath String?  // 🔹 đã có chữ ký
+  createdAt     DateTime @default(now())
+  posts         Post[]
+}
+
+// ======================
+// BẢNG ADMIN
+// ======================
+model Admin {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  name       String?
+  createdAt  DateTime @default(now())
+  isSuper    Boolean  @default(false)
+}
+
+// ======================
+// BẢNG BÀI ĐĂNG
+// ======================
+model Post {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  price       Float
+  location    String
+  landlordId  Int
+  landlord    Landlord   @relation(fields: [landlordId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}

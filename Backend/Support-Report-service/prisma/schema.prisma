@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model reports {
+  id              Int              @id @default(autoincrement())
+  ticket_id       Int?
+  reporter_id     String
+  reporter_role   String
+  reported_id     String?
+  report_type     String
+  title           String
+  content         String?
+  evidence        Json?
+  status          String           @default("pending")
+  severity        String           @default("medium")
+  admin_notes     String?
+  action          String?
+  created_at      DateTime         @default(now())
+  updated_at      DateTime
+  resolved_at     DateTime?
+  support_tickets support_tickets? @relation(fields: [ticket_id], references: [id])
+
+  @@index([report_type])
+  @@index([reporter_id])
+  @@index([status])
+}
+
+model support_tickets {
+  id          Int       @id @default(autoincrement())
+  userId      String
+  userRole    String
+  title       String
+  description String?
+  category    String?
+  status      String    @default("open")
+  priority    String    @default("normal")
+  assignedTo  String?
+  response    String?
+  attachments Json?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime
+  resolved_at DateTime?
+  reports     reports[]
+
+  @@index([category])
+  @@index([status])
+  @@index([userId])
+}

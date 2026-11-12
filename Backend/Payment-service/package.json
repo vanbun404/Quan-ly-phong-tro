@@ -1,0 +1,28 @@
+{
+  "name": "payment-service",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@payos/node": "1.0.6",
+    "@prisma/client": "^6.17.1",
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10",
+    "qrcode": "^1.5.4",
+    "vnpay": "^2.4.4"
+  },
+  "devDependencies": {
+    "prisma": "^6.17.1"
+  }
+}
